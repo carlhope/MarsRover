@@ -1,6 +1,6 @@
 ﻿namespace MarsRover;
 
-public enum CompassDirections
+public class InputParser
 {
 
 }
