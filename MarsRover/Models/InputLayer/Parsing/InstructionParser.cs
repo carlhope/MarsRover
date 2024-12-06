@@ -1,19 +1,23 @@
-﻿namespace MarsRover;
+﻿using MarsRover.Models.InputLayer.Parsing;
 
-public class InstructionParser
+namespace MarsRover;
+
+public class InstructionParser : IInstructionParser
 {
-    public List<Instructions> InstructionsList = new List<Instructions>();
     
-    public void ParseInstruction(string instruction){
-        instruction.ToUpper();
+    
+    public List<Instructions> ParseInstruction(string instruction){
+    List<Instructions> InstructionsList = new List<Instructions>();
+    instruction = instruction.ToUpper();
         char[] chars = instruction.ToCharArray();
         foreach(char c in chars){
-            if(c is instruction i){
-
+            if(Enum.IsDefined(typeof(Instructions), c.ToString())){
+                Instructions i = (Instructions)Enum.Parse(typeof(Instructions), c.ToString());
                 InstructionsList.Add(i);
             }
 
         }
+        return InstructionsList;
         
     }
 }

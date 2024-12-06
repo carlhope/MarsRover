@@ -6,6 +6,17 @@ public class Position
 //it's up to you!
 	public int X {get; set;}
 	public int Y {get; set;}
-	public CompassDirection Facing {get; set;}
-	// this type can be whatever your direction enum is called
+	public CompassDirections Direction {get; set;}
+
+    public Position(int x, int y, CompassDirections facing)
+    {
+        X = x;
+        Y = y;
+        Direction = facing;
+    }
+    // this type can be whatever your direction enum is called
+
+
+
+
 }
