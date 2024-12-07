@@ -43,6 +43,7 @@ namespace MarsRover
         {
 
             IsRoverInList (rover);
+            Console.WriteLine($"Facing {rover.position.Direction}");
             DisplayCurrentStatus();
 
             var pos = rover.position;
@@ -50,12 +51,15 @@ namespace MarsRover
             else Plateau.Grid[pos.X, pos.Y] = rover.ToString();
             foreach (Instructions instruction in instructions) 
             {
+                //var start = rover.position;
+                int startX = rover.position.X;
+                int startY = rover.position.Y;
                 int num = (int)pos.Direction;
                 //if L or R, change direction
                 if (instruction == Instructions.L) num--;
                 if (instruction == Instructions.R) num++;
                 pos.Direction = (CompassDirections)num;
-                bool movedPosition = false;
+                
                 if (instruction == Instructions.M)
                 {
                     //else if M, Move forward
@@ -73,7 +77,14 @@ namespace MarsRover
                 }
                
                 rover.position = pos;
-                DisplayCurrentStatus();
+                Console.WriteLine($"Facing {rover.position.Direction}");
+                if (rover.position.X != startX || rover.position.Y != startY)
+                {
+                    Plateau.Grid[rover.position.X, rover.position.Y] = rover.ToString();
+                    Plateau.Grid[startX, startY] = null;
+                    
+                    DisplayCurrentStatus();
+                }
 
             }
 

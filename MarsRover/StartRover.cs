@@ -17,6 +17,8 @@ namespace MarsRover.Models.InputLayer
             Position position = new Position(0, 0, 0);
             Rover rover = new Rover(position);
             rover.Id = random.Next(1,9999999);
+
+            //show grid here
             Console.WriteLine("Enter your instructions");
             Console.WriteLine("L for Left turn");
             Console.WriteLine("R for right turn");
