@@ -11,23 +11,36 @@ namespace MarsRover.Models.InputLayer
     {
         public void Play()
         {
-            Random random = new Random();
+            
             PlateauSize size = new PlateauSize(5,5);
             Plateau plateau = new Plateau(size);
             Position position = new Position(0, 0, 0);
+            OutputPlateau output = new OutputPlateau(plateau);
             Rover rover = new Rover(position);
-            rover.Id = random.Next(1,9999999);
-
-            //show grid here
-            Console.WriteLine("Enter your instructions");
-            Console.WriteLine("L for Left turn");
-            Console.WriteLine("R for right turn");
-            Console.WriteLine("M for move forward");
-            string input = Console.ReadLine();
             MissionControl mc = new MissionControl(plateau);
             InstructionParser parser = new InstructionParser();
-            List<Instructions> instructions = parser.ParseInstruction(input);
-            mc.Navigate(instructions, rover);
+            while (true)
+            {
+                //display starting output
+                output.DisplayCurrentStatus(position);
+                Console.WriteLine("Enter your instructions");
+                Console.WriteLine("L for Left turn");
+                Console.WriteLine("R for right turn");
+                Console.WriteLine("M for move forward");
+                Console.WriteLine("Q to Quit");
+                string input = Console.ReadLine();
+
+
+                //initialise game
+                
+                if (input.ToUpper() == "Q") break;
+                List<Instructions> instructions = parser.ParseInstruction(input);
+
+                //process result
+                var result = mc.Navigate(instructions, rover);
+                output.DisplayCurrentStatus(result);
+
+            }
         }
     }
 }
