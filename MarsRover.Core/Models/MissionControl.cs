@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -43,12 +44,14 @@ namespace MarsRover
         {
 
             IsRoverInList (rover);
-            Console.WriteLine($"Facing {rover.position.Direction}");
-            DisplayCurrentStatus();
 
             var pos = rover.position;
             if (Plateau.IsPositionEmpty(pos.X, pos.Y) == false) throw new Exception("Position occupied");
-            else Plateau.Grid[pos.X, pos.Y] = rover.ToString();
+            else Plateau.Grid[pos.X, pos.Y] = rover.Id.ToString();
+            DisplayCurrentStatus();
+            var startPositionX = pos.X;
+            var startPositionY = pos.Y;
+            Plateau.Grid[pos.X,pos.Y]=null;
             foreach (Instructions instruction in instructions) 
             {
                 //var start = rover.position;
@@ -59,7 +62,7 @@ namespace MarsRover
                 if (instruction == Instructions.L) num--;
                 if (instruction == Instructions.R) num++;
                 pos.Direction = (CompassDirections)num;
-                
+                bool movedPosition = false;
                 if (instruction == Instructions.M)
                 {
                     //else if M, Move forward
@@ -67,26 +70,25 @@ namespace MarsRover
                     if (pos.Direction == CompassDirections.N &&(pos.X-1)>= 0 && Plateau.IsPositionEmpty(pos.X - 1, pos.Y)) pos.X--; 
 
                     //if direction south, parent array ++
-                    if (pos.Direction == CompassDirections.S  && (pos.X + 1) < Plateau.Grid.GetLength(0) && Plateau.IsPositionEmpty(pos.X + 1, pos.Y)) pos.X++; 
+                    else if (pos.Direction == CompassDirections.S  && (pos.X + 1) < Plateau.Grid.GetLength(0) && Plateau.IsPositionEmpty(pos.X + 1, pos.Y)) pos.X++; 
                     //if direction east, nested array --
-                    if (pos.Direction == CompassDirections.E  &&(pos.Y-1)>=0 && Plateau.IsPositionEmpty(pos.X, pos.Y - 1)) pos.Y--; 
+                    else if (pos.Direction == CompassDirections.E  &&(pos.Y-1)>=0 && Plateau.IsPositionEmpty(pos.X, pos.Y - 1)) pos.Y--; 
                     //if direction west, nested array ++
-                    if (pos.Direction == CompassDirections.W  &&(pos.Y+1)<Plateau.Grid.GetLength(1) && Plateau.IsPositionEmpty(pos.X, pos.Y + 1)) pos.Y++;
-
+                    else if (pos.Direction == CompassDirections.W  &&(pos.Y+1)<Plateau.Grid.GetLength(1) && Plateau.IsPositionEmpty(pos.X, pos.Y + 1)) pos.Y++;
+                    else System.Console.WriteLine("nothing triggered");
                     
                 }
-               
                 rover.position = pos;
-                Console.WriteLine($"Facing {rover.position.Direction}");
-                if (rover.position.X != startX || rover.position.Y != startY)
-                {
-                    Plateau.Grid[rover.position.X, rover.position.Y] = rover.ToString();
-                    Plateau.Grid[startX, startY] = null;
-                    
-                    DisplayCurrentStatus();
-                }
+                DisplayCurrentStatus();
 
             }
+
+            Plateau.Grid[startPositionX, startPositionY] = null;
+            Plateau.Grid[pos.X, pos.Y] = rover.Id.ToString();
+            System.Console.WriteLine((startPositionX+" "+startPositionY));
+            System.Console.WriteLine(pos.X+" "+pos.Y+"");
+            System.Console.WriteLine(pos.Direction);
+            DisplayCurrentStatus();
 
             
 
@@ -109,7 +111,7 @@ namespace MarsRover
                     else
                     {
                         
-                        line += " X ";
+                        line += "X";
                     }
                     Console.Write(line);
                 }
