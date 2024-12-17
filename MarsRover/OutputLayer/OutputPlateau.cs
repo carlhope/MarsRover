@@ -26,7 +26,7 @@ namespace MarsRover
                     else
                     {
 
-                        line += "X";
+                        line += " X ";
                     }
                     Console.Write(line);
                 }

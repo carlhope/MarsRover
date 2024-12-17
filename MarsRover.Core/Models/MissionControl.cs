@@ -51,11 +51,10 @@ namespace MarsRover
             var pos = rover.position;
             //throws error here. suspect its because starting position is occuppied by the currently playing rover. its checking starting position
             //needs changing to position rover will occupy
-            if (Plateau.IsPositionEmpty(pos.X, pos.Y) == false) throw new Exception("Position occupied");
-            else Plateau.Grid[pos.X, pos.Y] = rover.Id.ToString();
+            
             var startPositionX = pos.X;
             var startPositionY = pos.Y;
-            Plateau.Grid[pos.X,pos.Y]=null;
+            Plateau.Grid[pos.X,pos.Y]=rover.Id.ToString();
             foreach (Instructions instruction in instructions) 
             {
               
@@ -65,8 +64,9 @@ namespace MarsRover
                 //if L or R, change direction
                 if (instruction == Instructions.L) num--;
                 if (instruction == Instructions.R) num++;
+                if (num >3) num = 0;
+                if (num < 0) num = 3;
                 pos.Direction = (CompassDirections)num;
-                bool movedPosition = false;
                 if (instruction == Instructions.M)
                 {
                     
@@ -75,9 +75,11 @@ namespace MarsRover
                     else if (pos.Direction == CompassDirections.E  &&(pos.Y-1)>=0 && Plateau.IsPositionEmpty(pos.X, pos.Y - 1)) pos.Y--; 
                     else if (pos.Direction == CompassDirections.W  &&(pos.Y+1)<Plateau.Grid.GetLength(1) && Plateau.IsPositionEmpty(pos.X, pos.Y + 1)) pos.Y++;
                 }
-                rover.position = pos;
+                if (Plateau.IsPositionEmpty(pos.X, pos.Y) == false && Plateau.Grid[pos.X, pos.Y] != rover.Id.ToString()) throw new Exception("Position occupied");
+               
             }
-
+            Plateau.Grid[pos.X, pos.Y] = rover.Id.ToString();
+            rover.position = pos;
             Plateau.Grid[startPositionX, startPositionY] = null;
             Plateau.Grid[pos.X, pos.Y] = rover.Id.ToString();
 

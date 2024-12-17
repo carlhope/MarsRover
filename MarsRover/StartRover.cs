@@ -19,10 +19,9 @@ namespace MarsRover.Models.InputLayer
             Rover rover = new Rover(position);
             MissionControl mc = new MissionControl(plateau);
             InstructionParser parser = new InstructionParser();
+            output.DisplayCurrentStatus(position);
             while (true)
             {
-                //display starting output
-                output.DisplayCurrentStatus(position);
                 Console.WriteLine("Enter your instructions");
                 Console.WriteLine("L for Left turn");
                 Console.WriteLine("R for right turn");
