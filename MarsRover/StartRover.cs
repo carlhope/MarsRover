@@ -14,7 +14,8 @@ namespace MarsRover.Models.InputLayer
             
             PlateauSize size = new PlateauSize(5,5);
             Plateau plateau = new Plateau(size);
-            Position position = new Position(0, 0, 0);
+            Position position = new Position(2, 2, 0);
+            plateau.Grid[2, 2] = "X";
             OutputPlateau output = new OutputPlateau(plateau);
             Rover rover = new Rover(position);
             MissionControl mc = new MissionControl(plateau);
